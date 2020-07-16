@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trz/Utils/custom_flat_button.dart';
 import 'package:trz/Utils/custom_text_field.dart';
 import 'package:trz/Utils/validator.dart';
+import 'package:geolocator/geolocator.dart';
 
 
 class RegisterScreen extends StatefulWidget {
@@ -12,20 +13,25 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-    final TextEditingController _fullname = new TextEditingController();
-    final TextEditingController _age = new TextEditingController();
-    final TextEditingController _gender = new TextEditingController();
 
-    //todo Localization
-    //todo items
+  Position _currentPosition;
 
-    CustomTextField _nameField;
-    CustomTextField _ageField;
-    CustomTextField _genderField;
+  final TextEditingController _fullname = new TextEditingController();
+  final TextEditingController _age = new TextEditingController();
+  final TextEditingController _gender = new TextEditingController();
+
+  //todo Localization
+  //todo items
+
+  CustomTextField _nameField;
+  CustomTextField _ageField;
+  CustomTextField _genderField;
 
     @override
     void initState() {
       super.initState();
+
+      _getCurrentLocation();
 
       _nameField = new CustomTextField(
         baseColor: Colors.grey,
@@ -84,7 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: <Widget>[
                     ListView(
 
-                      children: <Widget>[
+                      children: for (var value in <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(
                               top: 150.0, bottom: 10.0, left: 10.0, right: 10.0),
@@ -108,6 +114,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               top: 0.0, bottom: 10.0, left: 15.0, right: 15.0),
                           child: _genderField,
                         ),
+
+                        //TODO Fazer a escolha dos items aqui
+            
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 14.0, horizontal: 40.0),
@@ -118,6 +127,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             textColor: Colors.white,
                             onPressed: () {
 
+                              print("LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}");
+                              print("nome: ${_fullname.text}, age: ${_age.text}, gender: ${_gender.text}");
                             },
                             splashColor: Colors.black12,
                             borderColor: Colors.indigoAccent,
@@ -126,7 +137,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
 
-                      ],
+                      ]) {
+
+ },
                     ),
 
                   ],
@@ -137,4 +150,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       );
     }
+
+    _getCurrentLocation() {
+      final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+      geolocator
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+          .then((Position position) {
+        setState(() {
+          _currentPosition = position;
+        });
+      }).catchError((e) {
+        print(e);
+      });
+    }
+
 }
