@@ -1,3 +1,9 @@
+/*
+
+      Player info Class
+
+ */
+
 import 'Items.dart';
 
 class Survivor {

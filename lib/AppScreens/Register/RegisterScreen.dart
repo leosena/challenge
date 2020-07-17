@@ -1,9 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:trz/Classes/Items.dart';
 import 'package:trz/Utils/custom_flat_button.dart';
 import 'package:trz/Utils/custom_text_field.dart';
 import 'package:trz/Utils/validator.dart';
 import 'package:geolocator/geolocator.dart';
 
+import 'ItemsChooseScreen.dart';
+
+List<Items> itemData2 = [
+  Items(
+      name: 'Fiji Water',
+      valueItem: 14,
+      icon: FontAwesomeIcons.utensils
+  ),
+  Items(
+      name: 'Campbell Soup',
+      valueItem: 12,
+      icon: FontAwesomeIcons.utensils
+  ),
+  Items(
+      name: 'First Aid Pouch',
+      valueItem: 10,
+      icon: FontAwesomeIcons.utensils
+  ),
+  Items(
+      name: 'AK47',
+      valueItem: 8,
+      icon: FontAwesomeIcons.utensils
+  ),
+];
 
 class RegisterScreen extends StatefulWidget {
   static const routeName = '/registerscreen';
@@ -20,7 +46,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _age = new TextEditingController();
   final TextEditingController _gender = new TextEditingController();
 
-  //todo Localization
   //todo items
 
   CustomTextField _nameField;
@@ -47,8 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         errorColor: Colors.red,
         controller: _age,
         hint: "Age *",
-        validator: Validator.validateNumberPhone,
-        inputType: TextInputType.number,
+        validator: Validator.validateAge,
       );
       _genderField = new CustomTextField(
         baseColor: Colors.grey,
@@ -63,6 +87,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     @override
     Widget build(BuildContext context) {
+      int _itemCount = 0;
+
       return WillPopScope(
         child: Scaffold(
           body: Container(
@@ -84,13 +110,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
             child: Stack(
-              children: <Widget>[
-                Stack(
                   alignment: Alignment.topLeft,
                   children: <Widget>[
                     ListView(
 
-                      children: for (var value in <Widget>[
+                      children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(
                               top: 150.0, bottom: 10.0, left: 10.0, right: 10.0),
@@ -115,8 +139,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: _genderField,
                         ),
 
+
                         //TODO Fazer a escolha dos items aqui
-            
+
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 14.0, horizontal: 40.0),
@@ -127,8 +152,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             textColor: Colors.white,
                             onPressed: () {
 
-                              print("LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}");
-                              print("nome: ${_fullname.text}, age: ${_age.text}, gender: ${_gender.text}");
+                              return new ItemsChooseScreen(name: _fullname.text, age: _age.text, gender: _gender.text, posX: _currentPosition.latitude, posY: _currentPosition.longitude);
+                              //print("LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}");
+                              //print("nome: ${_fullname.text}, age: ${_age.text}, gender: ${_gender.text}");
                             },
                             splashColor: Colors.black12,
                             borderColor: Colors.indigoAccent,
@@ -137,18 +163,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
 
-                      ]) {
-
- },
+                      ]
                     ),
 
                   ],
                 ),
-              ],
             ),
           ),
-        ),
-      );
+        );
     }
 
     _getCurrentLocation() {

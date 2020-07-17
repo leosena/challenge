@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trz/AppScreens/RegisterScreen.dart';
-
-import 'UserMainScreen.dart';
+import 'Register/RegisterScreen.dart';
 
 class RootScreen extends StatefulWidget {
   static const routeName = '/rootscreen';
