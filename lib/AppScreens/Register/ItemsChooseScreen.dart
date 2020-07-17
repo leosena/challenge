@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+
+
 class ItemsChooseScreen extends StatefulWidget {
   final String name,
                age,
@@ -19,30 +21,20 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
   @override
   void initState() {
 
-    print("LAT: ${this.widget.posX}, LNG: ${this.widget.posY}");
-    print("nome: ${this.widget.name}, age: ${this.widget.age}, gender: ${this.widget.gender}");
   }
-
-
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Location"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            if (this.widget.posX != null && this.widget.posY != null)
-              Text(
-                  "LAT: ${this.widget.posX}, LNG: ${this.widget.posY}"),
-
-          ],
-        ),
-      ),
-    );
+    // TODO: implement build
+    throw UnimplementedError();
   }
+
+/*
+      if (this.widget.posX != null && this.widget.posY != null)
+                Text(
+                    "LAT: ${this.widget.posX}, LNG: ${this.widget.posY}"),
+
+
+ */
 
 }

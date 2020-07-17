@@ -1,35 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:trz/Classes/Items.dart';
 import 'package:trz/Utils/custom_flat_button.dart';
 import 'package:trz/Utils/custom_text_field.dart';
 import 'package:trz/Utils/validator.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'ItemsChooseScreen.dart';
-
-List<Items> itemData2 = [
-  Items(
-      name: 'Fiji Water',
-      valueItem: 14,
-      icon: FontAwesomeIcons.utensils
-  ),
-  Items(
-      name: 'Campbell Soup',
-      valueItem: 12,
-      icon: FontAwesomeIcons.utensils
-  ),
-  Items(
-      name: 'First Aid Pouch',
-      valueItem: 10,
-      icon: FontAwesomeIcons.utensils
-  ),
-  Items(
-      name: 'AK47',
-      valueItem: 8,
-      icon: FontAwesomeIcons.utensils
-  ),
-];
 
 class RegisterScreen extends StatefulWidget {
   static const routeName = '/registerscreen';
@@ -113,7 +88,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   alignment: Alignment.topLeft,
                   children: <Widget>[
                     ListView(
-
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(
@@ -152,9 +126,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             textColor: Colors.white,
                             onPressed: () {
 
-                              return new ItemsChooseScreen(name: _fullname.text, age: _age.text, gender: _gender.text, posX: _currentPosition.latitude, posY: _currentPosition.longitude);
-                              //print("LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}");
-                              //print("nome: ${_fullname.text}, age: ${_age.text}, gender: ${_gender.text}");
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ItemsChooseScreen(name: _fullname.text, age: _age.text, gender: _gender.text, posX: _currentPosition.latitude, posY: _currentPosition.longitude)),
+                                      (Route<dynamic> route) => false);
+
                             },
                             splashColor: Colors.black12,
                             borderColor: Colors.indigoAccent,
