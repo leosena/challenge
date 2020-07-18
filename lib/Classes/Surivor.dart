@@ -10,8 +10,8 @@ class Survivor {
   final age;
   final name;
   final gender;
-  int lastLocation_x;
-  int lastLocation_y;
+  double lastLocation_x;
+  double lastLocation_y;
   final ID;
 
   Items items;

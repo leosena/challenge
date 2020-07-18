@@ -15,8 +15,6 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
 
-  Position _currentPosition;
-
   final TextEditingController _fullname = new TextEditingController();
   final TextEditingController _age = new TextEditingController();
   final TextEditingController _gender = new TextEditingController();
@@ -30,8 +28,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     @override
     void initState() {
       super.initState();
-
-      _getCurrentLocation();
 
       _nameField = new CustomTextField(
         baseColor: Colors.grey,
@@ -62,7 +58,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     @override
     Widget build(BuildContext context) {
-      int _itemCount = 0;
 
       return WillPopScope(
         child: Scaffold(
@@ -129,7 +124,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          ItemsChooseScreen(name: _fullname.text, age: _age.text, gender: _gender.text, posX: _currentPosition.latitude, posY: _currentPosition.longitude)),
+                                          ItemsChooseScreen(name: _fullname.text, age: _age.text, gender: _gender.text)),
                                       (Route<dynamic> route) => false);
 
                             },
@@ -150,18 +145,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
     }
 
-    _getCurrentLocation() {
-      final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
-      geolocator
-          .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-          .then((Position position) {
-        setState(() {
-          _currentPosition = position;
-        });
-      }).catchError((e) {
-        print(e);
-      });
-    }
 
 }

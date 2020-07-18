@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trz/Utils/teste.dart';
 import 'Register/RegisterScreen.dart';
 
 class RootScreen extends StatefulWidget {
@@ -14,7 +13,6 @@ class _RootScreenState extends State<RootScreen> {
   Widget build(BuildContext context) {
 
     //TODO verificar usuario ja cadastrado.
-    //return new RegisterScreen();
-    return new FlutterExample();
+    return new RegisterScreen();
   }
 }
