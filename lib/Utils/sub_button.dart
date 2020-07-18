@@ -1,8 +1,14 @@
 
 import 'package:flutter/material.dart';
+import 'package:trz/AppScreens/Register/ItemsChooseScreen.dart';
+import 'package:trz/Classes/Items.dart';
 
 class SubButton extends StatefulWidget {
+  int value,
+      index;
+
   _SubButtonState createState() => _SubButtonState();
+  SubButton({this.value, this.index});
 }
 
 class _SubButtonState extends State<SubButton> {
@@ -12,7 +18,7 @@ class _SubButtonState extends State<SubButton> {
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: () {
-
+        print("sub btn click2: ${this.widget.value} , index: ${this.widget.index}");
       },
       color: Colors.blue,
       textColor: Colors.white,

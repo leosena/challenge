@@ -20,3 +20,9 @@ class Items {
 }
 
 
+List<Items> itemData = [
+  Items(name: 'Fiji Water', valueItem: 14, holdItems: 0),
+  Items(name: 'Campbell Soup', valueItem: 12, holdItems: 0),
+  Items(name: 'First Aid Pouch', valueItem: 10, holdItems: 0),
+  Items(name: 'AK47', valueItem: 8, holdItems: 0),
+];
