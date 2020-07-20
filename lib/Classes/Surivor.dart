@@ -3,18 +3,34 @@
       Player info Class
 
  */
+import 'dart:convert';
 
-import 'Items.dart';
+Survivor survivorFromJson(String str) => Survivor.fromJson(json.decode(str));
+
+String survivorToJson(Survivor data) => json.encode(data.toJson());
+
 
 class Survivor {
-  final age;
-  final name;
-  final gender;
-  double lastLocation_x;
-  double lastLocation_y;
-  final ID;
+  String age;
+  String name;
+  String gender;
+  String items;
 
-  Items items;
+  Survivor({this.name, this.age, this.gender, this.items});
 
-  Survivor(this.age, this.name, this.gender, this.lastLocation_x, this.lastLocation_y, this.ID);
+
+  factory Survivor.fromJson(Map<String, dynamic> json) => Survivor(
+    name: json["name"],
+    age: json["age"],
+    gender: json["gender"],
+    items: json["items"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "age": age,
+    "gender": gender,
+    "items": items,
+  };
+
 }

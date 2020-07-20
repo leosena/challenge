@@ -113,9 +113,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 14.0, horizontal: 40.0),
+                              vertical: 20.0, horizontal: 40.0),
                           child: CustomFlatButton(
-                            title: "Create Survivor",
+                            title: "Next",
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
                             textColor: Colors.white,

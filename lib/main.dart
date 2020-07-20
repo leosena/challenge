@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'AppScreens/WelcomeScreen.dart';
 
-void main() {
+void main() async {
   runApp(MyApp());
+
+  SharedPreferences.getInstance().then((prefs) {
+    runApp(MyApp(prefs: prefs));
+  });
 }
 
 
