@@ -1,9 +1,12 @@
+import 'dart:convert';
+
+
 /*
 
       Player info Class
 
  */
-import 'dart:convert';
+
 
 Survivor survivorFromJson(String str) => Survivor.fromJson(json.decode(str));
 
@@ -11,7 +14,7 @@ String survivorToJson(Survivor data) => json.encode(data.toJson());
 
 
 class Survivor {
-  String age;
+  int age;
   String name;
   String gender;
   String items;
@@ -34,3 +37,6 @@ class Survivor {
   };
 
 }
+
+
+

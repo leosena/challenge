@@ -26,8 +26,8 @@ class _AddSubButtonState extends State<AddSubButton> {
 
   }
 
-  int getValue(){
-    return itemData[this.widget.index].holdItems;
+  int getValue(int idx){
+    return itemData[idx].holdItems;
   }
 
   @override

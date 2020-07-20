@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:trz/AppScreens/UserMainScreen.dart';
 import 'package:trz/Classes/Items.dart';
 import 'package:trz/Classes/Surivor.dart';
 import 'package:trz/Utils/add_sub_button.dart';
 import 'package:trz/Utils/custom_flat_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert' ;
+import 'package:http/http.dart' as http;
+
 
 class ItemsChooseScreen extends StatefulWidget {
   final String name, age, gender;
+  Position currentPosition;
 
   int totalMoney;
 
-  Position currentPosition;
 
   ItemsChooseScreen({this.name, this.age, this.gender});
 
@@ -21,22 +23,6 @@ class ItemsChooseScreen extends StatefulWidget {
   State<StatefulWidget> createState() => new _ItemsChooseScreenState();
 }
 
-Future<Survivor> createSurvivor(String name, String age, String gender, String items) async {
-    final String apiUrl = "http://zssn-backend-example.herokuapp.com/api/people.json";
-    final response = await http.post(apiUrl, body: {
-      "name": name,
-      "age": age,
-      "gender": gender,
-      "items": items,
-    });
-
-    if(response.statusCode == 201){
-      final String responseString = response.body;
-      return Survivor.fromJson(responseString);
-    }else{
-      return null;
-    }
-}
 
 class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
   SharedPreferences _preferences;
@@ -49,9 +35,10 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
       ..then((prefs) {
         setState(() => this._preferences = prefs);
       });
+    _getCurrentLocation();
+
 
     this.widget.totalMoney = 100;
-    _getCurrentLocation();
   }
 
   @override
@@ -63,17 +50,22 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
 
 
   Widget _buildPlayerItems(BuildContext context) {
+
+    List<AddSubButton> listButtons = new List<AddSubButton>();
+
+
     return ListView.builder(
       itemCount: itemData.length,
       itemBuilder: (context, index) {
+        AddSubButton btn = new AddSubButton(index: index);
+        listButtons.add(btn);
         return Column(
           children: <Widget>[
+
             if (index == 0)
               Text("Total Money: ${this.widget.totalMoney}"),
               Padding(padding: EdgeInsets.only(bottom: 15.0, top: 5.0)),
-
             Row(
-              //crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
@@ -82,7 +74,8 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
                   padding: EdgeInsets.only(left: 5.0),
                 ),
                 Container(
-                  child: AddSubButton(index: index),
+
+                  child: btn,
                   alignment: Alignment.center,
                 ),
               ],
@@ -96,10 +89,23 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                   textColor: Colors.white,
-                  onPressed: () {
+                  onPressed: () async {
                     saveUniqueID("teste").then((bool commited){
-                      print("${this.widget.currentPosition.latitude}  ${this.widget.currentPosition.longitude}");
+
                     });
+
+                    String finalItems = "";
+                    for(int i = 0; i < listButtons.length; i++){
+                      finalItems += "${itemData[i].name}:${itemData[i].holdItems};";
+                    }
+                    //Survivor surv = await createSurvivorPost(this.widget.name, this.widget.age, this.widget.gender, finalItems);
+
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                UserMainScreen()),
+                            (Route<dynamic> route) => false);
+
                   },
                   splashColor: Colors.black12,
                   borderColor: Colors.indigoAccent,
@@ -113,9 +119,10 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
     );
   }
 
+
+
   _getCurrentLocation() {
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
-
     geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
