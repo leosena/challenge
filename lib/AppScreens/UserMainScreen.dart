@@ -1,29 +1,47 @@
-import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:device_id/device_id.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trz/Classes/Surivor.dart';
+import 'package:trz/Utils/post_get_api.dart';
 
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:imei_plugin/imei_plugin.dart';
+/*
+  Main user screen
+  Data of location
+
+  Not Registered:
+  Get data of the new survivor and update
+
+  or
+
+  Registered
+  Get data of registered survivor and update
+
+
+  Functions:
+  List of contacts
+  Add Survivor
+
+
+ */
 
 class UserMainScreen extends StatefulWidget {
   static const routeName = '/usermainscreen';
 
   Position currentPosition;
+  String uuid;
+
+  SharedPreferences prefs;
 
   @override
   State<StatefulWidget> createState() => new _UserMainScreenState();
 
-  UserMainScreen({this.currentPosition});
+  UserMainScreen({this.currentPosition, this.uuid, this.prefs});
 }
 
 class _UserMainScreenState extends State<UserMainScreen> {
   GoogleMapController mapController;
-  //String _deviceid = 'Unknown';
-  String uniqueId = "Unknown";
+  Future<Survivor> futureSurvivor;
 
 
   void _onMapCreated(GoogleMapController controller) {
@@ -32,28 +50,8 @@ class _UserMainScreenState extends State<UserMainScreen> {
 
   @override
   void initState() {
+    print(this.widget.uuid);
     super.initState();
-    initPlatformState();
-
-  }
-
-  Future<void> initPlatformState() async {
-    String idunique;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      idunique = await ImeiPlugin.getId();
-    } on PlatformException {
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      uniqueId = idunique;
-      print("unique ID : $uniqueId" );
-    });
   }
 
   @override
@@ -68,11 +66,14 @@ class _UserMainScreenState extends State<UserMainScreen> {
     );
   }
 
+
+
   Widget buildContainer(BuildContext context) {
     return _userScreenBuild(context);
   }
 
   Widget _userScreenBuild(BuildContext context) {
+
     return GoogleMap(
       onMapCreated: _onMapCreated,
       initialCameraPosition: CameraPosition(
@@ -124,4 +125,6 @@ class _UserMainScreenState extends State<UserMainScreen> {
       ),
     );
   }
+
+
 }

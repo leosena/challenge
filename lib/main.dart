@@ -31,6 +31,6 @@ class MyApp extends StatelessWidget {
   }
 
   Widget _handleCurrentScreen() {
-    return new WelcomeScreen();
+    return new WelcomeScreen(prefs: this.prefs);
   }
 }

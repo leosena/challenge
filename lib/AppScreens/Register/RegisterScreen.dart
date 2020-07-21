@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trz/Utils/custom_flat_button.dart';
 import 'package:trz/Utils/custom_text_field.dart';
 import 'package:trz/Utils/validator.dart';
@@ -9,11 +10,12 @@ import 'ItemsChooseScreen.dart';
 class RegisterScreen extends StatefulWidget {
   static const routeName = '/registerscreen';
   Position currentPosition;
-
+  String uuid;
+  SharedPreferences prefs;
 
   @override
   State<StatefulWidget> createState() => new _RegisterScreenState();
-  RegisterScreen({this.currentPosition});
+  RegisterScreen({this.currentPosition, this.uuid, this.prefs});
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -31,7 +33,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     @override
     void initState() {
       super.initState();
-
       _nameField = new CustomTextField(
         baseColor: Colors.grey,
         borderColor: Colors.grey[400],
@@ -111,9 +112,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: _genderField,
                         ),
 
-
-                        //TODO Fazer a escolha dos items aqui
-
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 20.0, horizontal: 40.0),
@@ -127,7 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          ItemsChooseScreen(name: _fullname.text, age: _age.text, gender: _gender.text, currentPosition: this.widget.currentPosition)),
+                                          ItemsChooseScreen(name: _fullname.text, age: _age.text, gender: _gender.text, currentPosition: this.widget.currentPosition, uuid: this.widget.uuid, prefs: this.widget.prefs)),
                                       (Route<dynamic> route) => false);
 
                             },

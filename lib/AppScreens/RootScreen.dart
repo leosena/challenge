@@ -2,24 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:imei_plugin/imei_plugin.dart';
+import 'package:trz/AppScreens/UserMainScreen.dart';
 import 'Register/RegisterScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+/*
+  Check user is registered or not
+  Route to Register page , or User page
+  Collect Geolocation data
+  Collect UUID info
+ */
 
 class RootScreen extends StatefulWidget {
   static const routeName = '/rootscreen';
 
+  SharedPreferences prefs;
+
   @override
   State<StatefulWidget> createState() => new _RootScreenState();
+  RootScreen({this.prefs});
 }
 
-class _RootScreenState extends State<RootScreen> {
+class _RootScreenState extends State<RootScreen>
+{
   Geolocator _geolocator = Geolocator();
   Position _currentPosition;
+  String uniqueId = "Unknown";
 
   @override
-  void initState() {
+  initState() {
     super.initState();
     _getCurrentLocation();
+    initPlatformState();
+
 
   }
 
@@ -30,16 +46,12 @@ class _RootScreenState extends State<RootScreen> {
     return _body;
   }
 
-  Future<String> _readPrefs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString("id");
-  }
+  Future<void> _readPrefs() async {
+    this.widget.prefs = await SharedPreferences.getInstance();
+    setState(() {
+      uniqueId = this.widget.prefs.getString("id");
 
-  Future<bool> _containsID() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("id found:");
-    print(prefs.getString("id"));
-    return prefs.containsKey("id");
+    });
   }
 
   _getCurrentLocation() async {
@@ -47,17 +59,27 @@ class _RootScreenState extends State<RootScreen> {
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) async {
       setState(() {
-        // Store the position in the variable
         _currentPosition = position;
-        print('CURRENT POS: $_currentPosition');
 
-        //TODO verify user unique ID not working.
-        setState(() => _body = RegisterScreen(currentPosition: position,));
+        //setState(() => _body = RegisterScreen(currentPosition: position, uuid: uniqueId, prefs: this.widget.prefs));
+
+
+        if(uniqueId == null)
+          setState(() => _body = RegisterScreen(currentPosition: position, uuid: uniqueId, prefs: this.widget.prefs));
+        else
+          setState(() => _body = UserMainScreen(currentPosition: position, uuid: uniqueId, prefs: this.widget.prefs));
+
+
       });
     }).catchError((e) {
       print(e);
     });
   }
+
+  Future<void> initPlatformState() async {
+    _readPrefs();
+  }
+
 
 
 }

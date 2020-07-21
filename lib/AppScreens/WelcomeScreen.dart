@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 import 'RootScreen.dart';
 
 class WelcomeScreen extends StatefulWidget {
+  SharedPreferences prefs;
+
   @override
   _WelcomeScreenState createState() => new _WelcomeScreenState();
+  WelcomeScreen({this.prefs});
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
@@ -26,7 +30,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         ),
 
         seconds: 2,
-        navigateAfterSeconds: new RootScreen(),
+        navigateAfterSeconds: new RootScreen(prefs: this.widget.prefs),
 
         image: new Image.asset(
           'assets/images/survivors.jpg',

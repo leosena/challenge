@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trz/AppScreens/UserMainScreen.dart';
 import 'package:trz/Classes/Items.dart';
 import 'package:trz/Classes/Surivor.dart';
 import 'package:trz/Utils/add_sub_button.dart';
 import 'package:trz/Utils/custom_flat_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' ;
 import 'package:http/http.dart' as http;
+import 'package:trz/Utils/post_get_api.dart';
 
 
 class ItemsChooseScreen extends StatefulWidget {
-  final String name, age, gender;
-  Position currentPosition;
+  final String name,
+               age,
+               gender,
+               uuid;
 
+  Position currentPosition;
   int totalMoney;
 
-  ItemsChooseScreen({this.name, this.age, this.gender, this.currentPosition});
+  SharedPreferences prefs;
+
+  ItemsChooseScreen({this.name, this.age, this.gender, this.currentPosition, this.uuid, this.prefs});
 
   @override
   State<StatefulWidget> createState() => new _ItemsChooseScreenState();
@@ -24,19 +30,12 @@ class ItemsChooseScreen extends StatefulWidget {
 
 
 class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
-  SharedPreferences _preferences;
 
   String id;
 
   @override
   void initState() {
-    SharedPreferences.getInstance()
-      ..then((prefs) {
-        setState(() => this._preferences = prefs);
-      });
     _getCurrentLocation();
-
-
     this.widget.totalMoney = 100;
   }
 
@@ -89,20 +88,20 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
                   fontWeight: FontWeight.w700,
                   textColor: Colors.white,
                   onPressed: () async {
-                    saveUniqueID("teste").then((bool commited){
-
-                    });
 
                     String finalItems = "";
                     for(int i = 0; i < listButtons.length; i++){
                       finalItems += "${itemData[i].name}:${itemData[i].holdItems};";
                     }
-                    //Survivor surv = await createSurvivorPost(this.widget.name, this.widget.age, this.widget.gender, finalItems);
+
+                    Survivor surv = await createSurvivorPost(this.widget.name, this.widget.age, this.widget.gender, finalItems);
+                    _setPrefs(surv.id);
+
 
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (context) =>
-                                UserMainScreen(currentPosition: this.widget.currentPosition)),
+                                UserMainScreen(currentPosition: this.widget.currentPosition, uuid: this.widget.uuid, prefs: this.widget.prefs)),
                             (Route<dynamic> route) => false);
 
                   },
@@ -133,8 +132,9 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
     });
   }
 
-  Future<bool> saveUniqueID(String id) async {
-    this._preferences.setString("id", id);
+  Future<void> _setPrefs(String uuid) async {
+    this.widget.prefs = await SharedPreferences.getInstance();
+    this.widget.prefs.setString("id", uuid);
   }
 
 }
