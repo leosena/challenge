@@ -16,8 +16,7 @@ class ItemsChooseScreen extends StatefulWidget {
 
   int totalMoney;
 
-
-  ItemsChooseScreen({this.name, this.age, this.gender});
+  ItemsChooseScreen({this.name, this.age, this.gender, this.currentPosition});
 
   @override
   State<StatefulWidget> createState() => new _ItemsChooseScreenState();
@@ -103,7 +102,7 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (context) =>
-                                UserMainScreen()),
+                                UserMainScreen(currentPosition: this.widget.currentPosition)),
                             (Route<dynamic> route) => false);
 
                   },

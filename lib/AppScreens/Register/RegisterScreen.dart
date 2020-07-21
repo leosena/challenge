@@ -8,9 +8,12 @@ import 'ItemsChooseScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const routeName = '/registerscreen';
+  Position currentPosition;
+
 
   @override
   State<StatefulWidget> createState() => new _RegisterScreenState();
+  RegisterScreen({this.currentPosition});
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -124,7 +127,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          ItemsChooseScreen(name: _fullname.text, age: _age.text, gender: _gender.text)),
+                                          ItemsChooseScreen(name: _fullname.text, age: _age.text, gender: _gender.text, currentPosition: this.widget.currentPosition)),
                                       (Route<dynamic> route) => false);
 
                             },
