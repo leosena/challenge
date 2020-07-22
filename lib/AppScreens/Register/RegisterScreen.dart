@@ -39,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         errorColor: Colors.red,
         controller: _fullname,
         hint: "Name *",
-        //validator: Validator.validateName,
+        validator: Validator.validateName,
       );
       _ageField = new CustomTextField(
         baseColor: Colors.grey,
@@ -55,7 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         errorColor: Colors.red,
         controller: _gender,
         hint: "Gender *",
-        validator: Validator.validateName,
+        validator: Validator.validateGender,
       );
 
     }

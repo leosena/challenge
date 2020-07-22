@@ -9,6 +9,11 @@ class Validator {
         .contains(new RegExp(r"^[a-zA-ZÀ-ú]$"));
   }
 
+  static bool validateGender(String text) {
+    return text
+        .contains(new RegExp(r"^[FM]$"));
+  }
+
   static bool validateNumberWhats (String text) {
     Pattern pattern = r'^$|^\D?(\d{3})\D?\D?(\d{3})\D?(\d{5})$';
     RegExp regex = new RegExp(pattern);
@@ -22,7 +27,7 @@ class Validator {
   }
 
   static bool validateAge (String text) {
-    Pattern pattern = r'^$|^\D?([0-9]{1,2})$';
+    Pattern pattern = r'(^[0-9]{1,2})$';
     RegExp regex = new RegExp(pattern);
     return regex.hasMatch(text);
   }

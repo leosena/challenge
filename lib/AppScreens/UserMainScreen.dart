@@ -3,7 +3,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trz/Classes/Surivor.dart';
-import 'package:trz/Utils/post_get_api.dart';
+import 'package:trz/Utils/appbar.dart';
+import 'file:///C:/Users/lscunha/AndroidStudioProjects/Project/challenge/lib/Services/Http.dart';
+
+import 'AddSurvivorScreen.dart';
+import 'FriendListScreen.dart';
 
 /*
   Main user screen
@@ -58,16 +62,11 @@ class _UserMainScreenState extends State<UserMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('The Resident Zombie'),
-        backgroundColor: Colors.green[700],
-      ),
+      appBar: buildAppBar('The Resident Zombie'),
       body: buildContainer(context),
       bottomNavigationBar: _bottomAppBarBuild(context),
     );
   }
-
-
 
   Widget buildContainer(BuildContext context) {
     return _userScreenBuild(context);
@@ -102,11 +101,20 @@ class _UserMainScreenState extends State<UserMainScreen> {
           ),
           IconButton(
             icon: Icon(Icons.contact_mail),
-            onPressed: () {},
+            onPressed: () {
+
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          FriendListScreen(uuid: this.widget.uuid, prefs: this.widget.prefs)),
+                      (Route<dynamic> route) => false);
+            },
           ),
           IconButton(
             icon: Icon(Icons.bookmark_border),
-            onPressed: () {},
+            onPressed: () {
+
+            },
           ),
         ],
       ),
@@ -120,7 +128,17 @@ class _UserMainScreenState extends State<UserMainScreen> {
           ListTile(
             leading: const Icon(Icons.search),
             title: const Text("Add a survivor!"),
-            onTap: () {},
+            onTap: () {
+
+
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          AddSurvivorScreen(prefs: this.widget.prefs)),
+                      (Route<dynamic> route) => false);
+
+
+            },
           ),
         ],
       ),

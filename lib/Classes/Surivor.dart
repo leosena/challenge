@@ -42,6 +42,20 @@ class Survivor {
     "lonlat": lonlat,
   };
 
+  String printSurvivorInfo () {
+    String str;
+
+    str = "Name: $name\n\n$gender, $age\n\nLocation: $lonlat\n\n";
+    return str;
+  }
+
+  String returnSurvivorID () {
+    String str;
+
+    str = "$id";
+    return str;
+  }
+
 }
 
 

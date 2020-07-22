@@ -8,7 +8,7 @@ import 'package:trz/Utils/add_sub_button.dart';
 import 'package:trz/Utils/custom_flat_button.dart';
 import 'dart:convert' ;
 import 'package:http/http.dart' as http;
-import 'package:trz/Utils/post_get_api.dart';
+import 'file:///C:/Users/lscunha/AndroidStudioProjects/Project/challenge/lib/Services/Http.dart';
 
 
 class ItemsChooseScreen extends StatefulWidget {
