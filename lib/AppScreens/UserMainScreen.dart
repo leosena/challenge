@@ -41,7 +41,6 @@ class UserMainScreen extends StatefulWidget {
 
 class _UserMainScreenState extends State<UserMainScreen> {
   GoogleMapController mapController;
-  Future<Survivor> futureSurvivor;
 
 
   void _onMapCreated(GoogleMapController controller) {
@@ -50,8 +49,8 @@ class _UserMainScreenState extends State<UserMainScreen> {
 
   @override
   void initState() {
-    print(this.widget.uuid);
     super.initState();
+    getRequest(this.widget.uuid);
   }
 
   @override
@@ -126,5 +125,12 @@ class _UserMainScreenState extends State<UserMainScreen> {
     );
   }
 
+  Future<void> getRequest(String uid) async {
+    Survivor postSurv;
+    Survivor surv = await fetchSurvivorGet(this.widget.uuid);
+
+    postSurv = await updateSurvivorPost(surv.name, surv.age.toString(), surv.gender, this.widget.currentPosition.latitude.toString(), this.widget.currentPosition.longitude.toString(), this.widget.uuid);
+
+  }
 
 }

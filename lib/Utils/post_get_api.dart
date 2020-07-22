@@ -40,11 +40,11 @@ Future<Survivor> fetchSurvivorGet (String uuid) async {
 
 
 
-Future<Survivor> updateSurvivorPost (String name, String age, String gender, String items, String lonlat, String uuid) async {
+Future<Survivor> updateSurvivorPost (String name, String age, String gender, String lat, String lon, String uuid) async {
   final String apiUrl = "http://zssn-backend-example.herokuapp.com/api/people/$uuid.json";
-  String lonlatStr = "POINT ($lonlat)";
+  String lonlatStr = "POINT ($lat $lon)";
 
-  Survivor survTmp = new Survivor(name: name, age: int.tryParse(age), gender: gender, items: items, lonlat: lonlatStr);
+  Survivor survTmp = new Survivor(name: name, age: int.tryParse(age), gender: gender, lonlat: lonlatStr);
 
   var bodyValue = survTmp.toJson();
   var bodyData = json.encode(bodyValue);
@@ -52,7 +52,7 @@ Future<Survivor> updateSurvivorPost (String name, String age, String gender, Str
   print(bodyData);
 
   //final response = await http.post(apiUrl, body: bodyData);
-  final response = await http.post(
+  final response = await http.put(
     apiUrl,
     headers: {"Content-Type": "application/json"},
     body: bodyData,
@@ -63,7 +63,5 @@ Future<Survivor> updateSurvivorPost (String name, String age, String gender, Str
   }else{
     return null;
   }
-
-
 
 }
