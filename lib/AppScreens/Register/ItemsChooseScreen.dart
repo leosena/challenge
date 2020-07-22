@@ -94,14 +94,14 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
                       finalItems += "${itemData[i].name}:${itemData[i].holdItems};";
                     }
 
-                    Survivor surv = await createSurvivorPost(this.widget.name, this.widget.age, this.widget.gender, finalItems);
+                    Survivor surv = await createSurvivorPost(this.widget.name, this.widget.age, this.widget.gender, this.widget.currentPosition.latitude.toString(), this.widget.currentPosition.longitude.toString(), finalItems);
                     _setPrefs(surv.id);
 
 
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (context) =>
-                                UserMainScreen(currentPosition: this.widget.currentPosition, uuid: this.widget.uuid, prefs: this.widget.prefs)),
+                                UserMainScreen(currentPosition: this.widget.currentPosition, uuid: this.widget.uuid, prefs: this.widget.prefs, lastScreen: "register",)),
                             (Route<dynamic> route) => false);
 
                   },

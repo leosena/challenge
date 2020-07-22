@@ -3,9 +3,10 @@ import 'package:trz/Classes/Surivor.dart';
 import 'package:http/http.dart' as http;
 
 
-Future<Survivor> createSurvivorPost (String name, String age, String gender, String items) async {
+Future<Survivor> createSurvivorPost (String name, String age, String gender, String lat, String lon, String items) async {
   final String apiUrl = "http://zssn-backend-example.herokuapp.com/api/people.json";
-  Survivor survTmp = new Survivor(name: name, age: int.tryParse(age), gender: gender, items: items);
+  String lonlatStr = "POINT ($lat $lon)";
+  Survivor survTmp = new Survivor(name: name, age: int.tryParse(age), gender: gender, lonlat: lonlatStr, items: items);
 
   var bodyValue = survTmp.toJson();
   var bodyData = json.encode(bodyValue);

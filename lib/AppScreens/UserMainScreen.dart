@@ -29,14 +29,14 @@ class UserMainScreen extends StatefulWidget {
   static const routeName = '/usermainscreen';
 
   Position currentPosition;
-  String uuid;
+  String uuid, lastScreen;
 
   SharedPreferences prefs;
 
   @override
   State<StatefulWidget> createState() => new _UserMainScreenState();
 
-  UserMainScreen({this.currentPosition, this.uuid, this.prefs});
+  UserMainScreen({this.currentPosition, this.uuid, this.prefs, this.lastScreen});
 }
 
 class _UserMainScreenState extends State<UserMainScreen> {
@@ -50,7 +50,9 @@ class _UserMainScreenState extends State<UserMainScreen> {
   @override
   void initState() {
     super.initState();
-    getRequest(this.widget.uuid);
+
+    if(this.widget.lastScreen == "root")
+      getRequest(this.widget.uuid);
   }
 
   @override
