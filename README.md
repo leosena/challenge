@@ -17,8 +17,7 @@ User need to activate GPS and allow APP to access GPS data.
 ## APP Flow
 Splash Screen: Introduction of APP
 
-![Splash](Screens/splash.png)
-
+(https://github.com/leosena/challenge/blob/master/Screens/splash.PNG)
 
 
 Register Screen: Here user register with his name, age and gender.
