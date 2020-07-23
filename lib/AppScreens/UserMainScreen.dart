@@ -3,8 +3,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trz/Classes/Surivor.dart';
+import 'package:trz/Services/Http.dart';
 import 'package:trz/Utils/appbar.dart';
-import 'file:///C:/Users/lscunha/AndroidStudioProjects/Project/challenge/lib/Services/Http.dart';
 
 import 'AddSurvivorScreen.dart';
 import 'FriendListScreen.dart';

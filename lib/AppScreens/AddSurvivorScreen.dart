@@ -90,6 +90,7 @@ class _AddSurvivorScreenState extends State<AddSurvivorScreen> {
               padding: const EdgeInsets.symmetric(
                   vertical: 15.0, horizontal: 15.0),
               child: RaisedButton(
+                color: Colors.green[700],
                 onPressed: () {
                   _setPrefs(_addFieldController.text);
                   _addFieldController.clear();

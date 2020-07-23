@@ -10,6 +10,7 @@ class Validator {
   }
 
   static bool validateGender(String text) {
+
     return text
         .contains(new RegExp(r"^[FM]$"));
   }

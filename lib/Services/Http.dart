@@ -87,7 +87,7 @@ Future<int> reportInfectedPost () async {
     body: bodyData,
   );
 
-  print (response.statusCode);
+  //print (response.statusCode);
 
   if(response.statusCode == 204){
     return response.statusCode;

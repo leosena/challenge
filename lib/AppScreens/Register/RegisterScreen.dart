@@ -38,7 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       errorColor: Colors.red,
       controller: _fullname,
       hint: "Name *",
-      //validator: Validator.validateName,
+      validator: Validator.validateName,
     );
     _ageField = new CustomTextField(
       baseColor: Colors.grey,
@@ -54,7 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       errorColor: Colors.red,
       controller: _gender,
       hint: "Gender *",
-      validator: Validator.validateName,
+      validator: Validator.validateGender,
     );
   }
 
@@ -118,17 +118,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     textColor: Colors.white,
                     onPressed: () {
 
-
-                      Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => ItemsChooseScreen(
-                                  name: _fullname.text,
-                                  age: _age.text,
-                                  gender: _gender.text,
-                                  currentPosition: this.widget.currentPosition,
-                                  uuid: this.widget.uuid,
-                                  prefs: this.widget.prefs))
-                      );
+                      if (Validator.validateName(_fullname.text) &&
+                          Validator.validateAge(_age.text) &&
+                          Validator.validateGender(_gender.text))
+                       Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => ItemsChooseScreen(
+                                    name: _fullname.text,
+                                    age: _age.text,
+                                    gender: _gender.text,
+                                    currentPosition: this.widget.currentPosition,
+                                    uuid: this.widget.uuid,
+                                    prefs: this.widget.prefs))
+                        );
 
                     },
                     splashColor: Colors.black12,

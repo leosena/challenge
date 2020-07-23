@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trz/AppScreens/TradeItemsScreen.dart';
 import 'package:trz/Classes/Surivor.dart';
+import 'package:trz/Services/Http.dart';
 import 'package:trz/Utils/appbar.dart';
 import 'package:trz/Utils/custom_flat_button.dart';
 import 'package:trz/Utils/custom_text_field.dart';
 import 'package:trz/Utils/text.dart';
 import 'UserMainScreen.dart';
-import 'file:///C:/Users/lscunha/AndroidStudioProjects/Project/challenge/lib/Services/Http.dart';
 
 /*
 
@@ -114,7 +114,7 @@ class _FriendListScreenState extends State<FriendListScreen> {
                       onPressed: () async {
                         await _setPrefs(listSurvivor[index].returnSurvivorID());
                         int statusCode = await reportInfectedPost();
-                        print("STATUS: $statusCode");
+                        //print("STATUS: $statusCode");
 
                         if(statusCode == 204){
                           final snackBar = SnackBar(
@@ -153,7 +153,7 @@ class _FriendListScreenState extends State<FriendListScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text("Loading friend list..."),
+            Text("Add some friends..."),
           ],
         ),
       );
