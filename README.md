@@ -17,6 +17,10 @@ User need to activate GPS and allow APP to access GPS data.
 ## APP Flow
 Splash Screen: Introduction of APP
 
+![Splash](Screens/splash.png)
+
+
+
 Register Screen: Here user register with his name, age and gender.
 
 - User must follow some Name pattern, Age between 1-99 and gender 'M' or 'F' to proceed.
