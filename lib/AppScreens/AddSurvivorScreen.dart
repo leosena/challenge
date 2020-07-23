@@ -4,6 +4,8 @@ import 'package:trz/Utils/appbar.dart';
 import 'package:trz/Utils/custom_flat_button.dart';
 import 'package:trz/Utils/custom_text_field.dart';
 
+import 'UserMainScreen.dart';
+
 /*
 
   Functions:
@@ -15,15 +17,15 @@ import 'package:trz/Utils/custom_text_field.dart';
 
 class AddSurvivorScreen extends StatefulWidget {
   static const routeName = '/addsurvivorscreen';
-  SharedPreferences prefs;
 
   @override
   State<StatefulWidget> createState() => new _AddSurvivorScreenState();
 
-  AddSurvivorScreen({this.prefs});
+  AddSurvivorScreen();
 }
 
 class _AddSurvivorScreenState extends State<AddSurvivorScreen> {
+  SharedPreferences prefs;
   final TextEditingController _addFieldController = new TextEditingController();
   CustomTextField _addField;
 
@@ -45,10 +47,14 @@ class _AddSurvivorScreenState extends State<AddSurvivorScreen> {
 
   }
 
+  _onBackPressed() {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar('Add Survivor'),
+      appBar: buildAppBar('Add Survivor', _onBackPressed),
       body: Builder(
         builder: (BuildContext context){
           return buildContainer(context);
@@ -102,45 +108,20 @@ class _AddSurvivorScreenState extends State<AddSurvivorScreen> {
     );
   }
 
-  /*
-  CustomFlatButton(
-                title: "Invite",
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                textColor: Colors.white,
-                onPressed: () async {
-                  _setPrefs(_addFieldController.text);
-                },
-                splashColor: Colors.black12,
-                borderColor: Colors.indigoAccent,
-                borderWidth: 0,
-                color: Colors.indigoAccent,
-              ),
-
-
-   */
-
-  /*
-
-
-
-   */
-
-
   Future<void> _setPrefs(String uuid) async {
     String str;
 
-    this.widget.prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
 
-    str = this.widget.prefs.getString("contacts");
+    str = prefs.getString("contacts");
 
     if(str == null) {
       print("Add: $uuid");
-      this.widget.prefs.setString("contacts", uuid);
+      prefs.setString("contacts", uuid);
     }
     else {
       print("Add Concat: $str,$uuid");
-      this.widget.prefs.setString("contacts", "$str,$uuid");
+      prefs.setString("contacts", "$str,$uuid");
     }
   }
 

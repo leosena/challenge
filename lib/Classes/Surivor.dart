@@ -20,9 +20,10 @@ class Survivor {
   String gender;
   String items;
   String lonlat;
+  bool infected;
 
   //Survivor({this.name, this.age, this.gender, this.items});
-  Survivor({this.id, this.name, this.age, this.gender, this.items, this.lonlat});
+  Survivor({this.id, this.name, this.age, this.gender, this.items, this.lonlat, this.infected});
 
 
   factory Survivor.fromJson(Map<String, dynamic> json) => Survivor(
@@ -31,7 +32,8 @@ class Survivor {
     age: json["age"],
     gender: json["gender"],
     items: json["items"],
-    lonlat: json["lonlat"]
+    lonlat: json["lonlat"],
+    infected: json["infected"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -53,6 +55,20 @@ class Survivor {
     String str;
 
     str = "$id";
+    return str;
+  }
+
+  bool returnSurvivorInfected () {
+    bool b;
+
+    b = this.infected;
+    return b;
+  }
+
+  String returnSurvivorPosition () {
+    String str;
+
+    str = "$lonlat";
     return str;
   }
 

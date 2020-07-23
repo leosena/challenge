@@ -5,6 +5,8 @@ import 'package:trz/Classes/Surivor.dart';
 import 'package:trz/Utils/appbar.dart';
 import 'package:trz/Utils/custom_flat_button.dart';
 import 'package:trz/Utils/custom_text_field.dart';
+import 'package:trz/Utils/text.dart';
+import 'UserMainScreen.dart';
 import 'file:///C:/Users/lscunha/AndroidStudioProjects/Project/challenge/lib/Services/Http.dart';
 
 /*
@@ -17,77 +19,86 @@ import 'file:///C:/Users/lscunha/AndroidStudioProjects/Project/challenge/lib/Ser
  */
 
 class FriendListScreen extends StatefulWidget {
-  static const routeName = '/addsurvivorscreen';
-  SharedPreferences prefs;
-  String uuid;
+  static const routeName = '/friendlistscreen';
 
   @override
   State<StatefulWidget> createState() => new _FriendListScreenState();
 
-  FriendListScreen({this.uuid, this.prefs});
+  FriendListScreen();
 }
 
 class _FriendListScreenState extends State<FriendListScreen> {
+  SharedPreferences prefs;
   String survivorIDs;
   List<Survivor> listSurvivor;
-
-  Color color = Color(0xFFFFDFDFDF);
+  String uniqueId = "Unknown";
+  Color color;
+  int statusCode;
 
   @override
   void initState() {
     super.initState();
     listSurvivor = new List<Survivor>();
+    color = Colors.white;
 
     _getPrefs();
+    _readPrefs();
+  }
+
+  _onBackPressed() {
+    Navigator.of(context).pop();
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar('Friends'),
+      appBar: buildAppBar('Friends', _onBackPressed),
       body: buildContainer(context),
     );
   }
 
   Widget buildContainer(BuildContext context) {
-    if (survivorIDs != null) {
+    if (survivorIDs != null && uniqueId != "Unknown") {
       return ListView.builder(
         itemCount: listSurvivor.length,
         itemBuilder: (context, index) {
+          bool infected = listSurvivor[index].returnSurvivorInfected();
+
+
           return Container(
             padding: EdgeInsets.only(left: 15.0, right: 15.0),
-
-            decoration: const BoxDecoration(
-              border: Border(
-                top: BorderSide(width: 1.0, color: Color(0xFFFFDFDFDF)),
-                left: BorderSide(width: 1.0, color: Color(0xFFFFDFDFDF)),
-                right: BorderSide(width: 1.0, color: Color(0xFFFF7F7F7F)),
-                bottom: BorderSide(width: 1.0, color: Color(0xFFFF7F7F7F)),
-              ),
-              color: Color(0xFFFF7F7F7F),
-            ),
 
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 ExpansionTile(
-                  title: Text(listSurvivor[index].returnSurvivorID()),
+                  title: mediumText(listSurvivor[index].returnSurvivorID()),
+                  backgroundColor: color,
                   children: <Widget>[
-                    Text(listSurvivor[index].printSurvivorInfo()),
+                    mediumText(listSurvivor[index].printSurvivorInfo()),
+
+                    if(infected == true)
+                      bigText("USER INFECTED !!!!", Colors.red),
+
                     FlatButton(
                       color: Colors.green[700],
                       textColor: Colors.white,
-                      onPressed: () {
-                        if (checkDistanceSurvivors() == true) {
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (context) => TradeItemsScreen(
-                                      uuid: this.widget.uuid,
-                                      friendUuid: listSurvivor[index]
-                                          .returnSurvivorID(),
-                                      prefs: this.widget.prefs)),
-                              (Route<dynamic> route) => false);
+                      onPressed: () async {
+                        bool flagDistance = await checkDistanceSurvivors(listSurvivor[index].returnSurvivorID());
+                        if ( flagDistance == true || infected == false) {
+                          await _setPrefs(listSurvivor[index].returnSurvivorID());
+                          Navigator.of(context).pushNamed('/tradeitemscreen');
+
+                        }
+                        else {
+                          final snackBar = SnackBar(
+                            content: Text('For some reason you cant trade him :)'),
+                          );
+
+                          Scaffold.of(context).showSnackBar(snackBar);
+
                         }
                       },
                       child: Text(
@@ -100,9 +111,27 @@ class _FriendListScreenState extends State<FriendListScreen> {
                     FlatButton(
                       color: Colors.green[700],
                       textColor: Colors.white,
-                      onPressed: () {
-                        setState(() {
-                        });
+                      onPressed: () async {
+                        await _setPrefs(listSurvivor[index].returnSurvivorID());
+                        int statusCode = await reportInfectedPost();
+                        print("STATUS: $statusCode");
+
+                        if(statusCode == 204){
+                          final snackBar = SnackBar(
+                            content: Text('Survivor reported as infected!'),
+                          );
+
+                          Scaffold.of(context).showSnackBar(snackBar);
+
+                        }
+                        else{
+                          final snackBar = SnackBar(
+                            content: Text('Ooops....'),
+                          );
+
+                          Scaffold.of(context).showSnackBar(snackBar);
+
+                        }
                       },
                       child: Text(
                         "Report as Infected",
@@ -134,9 +163,9 @@ class _FriendListScreenState extends State<FriendListScreen> {
   Future<void> _getPrefs() async {
     List<Survivor> tmpList = new List<Survivor>();
     Survivor surv;
-    this.widget.prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
 
-    survivorIDs = this.widget.prefs.getString("contacts");
+    survivorIDs = prefs.getString("contacts");
     var arr = survivorIDs.split(',');
 
     for (int i = 0; i < arr.length; i++) {
@@ -149,9 +178,45 @@ class _FriendListScreenState extends State<FriendListScreen> {
     });
   }
 
-  bool checkDistanceSurvivors() {
-    //TODO
+  Future<void> _readPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      uniqueId = prefs.getString("id");
 
-    return true;
+    });
   }
+
+  Future<bool> checkDistanceSurvivors(String friendUUID) async {
+    Survivor survYou;
+    Survivor survFriend;
+
+    survYou = await fetchSurvivorGet (uniqueId);
+    survFriend = await fetchSurvivorGet (friendUUID);
+
+    return calcDist(survYou.returnSurvivorPosition(), survFriend.returnSurvivorPosition());
+
+  }
+
+
+  bool calcDist(String myPos, String friendPos) {
+    if (myPos == friendPos)
+      return true;
+    else
+      return false;
+
+  }
+
+  Future<void> _setPrefs(String uuid) async {
+    prefs = await SharedPreferences.getInstance();
+
+    bool CheckValue = prefs.containsKey('fid');
+    if(CheckValue == null)
+      prefs.setString("fid", uuid);
+    else{
+      prefs.remove("fid");
+      prefs.setString("fid", uuid);
+    }
+  }
+
+
 }

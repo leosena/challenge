@@ -4,53 +4,64 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trz/AppScreens/UserMainScreen.dart';
 import 'package:trz/Classes/Items.dart';
 import 'package:trz/Classes/Surivor.dart';
+import 'package:trz/Services/Http.dart';
 import 'package:trz/Utils/add_sub_button.dart';
+import 'package:trz/Utils/appbar.dart';
 import 'package:trz/Utils/custom_flat_button.dart';
-import 'dart:convert' ;
-import 'package:http/http.dart' as http;
-import 'file:///C:/Users/lscunha/AndroidStudioProjects/Project/challenge/lib/Services/Http.dart';
 
+import 'RegisterScreen.dart';
 
 class ItemsChooseScreen extends StatefulWidget {
-  final String name,
-               age,
-               gender,
-               uuid;
+  static const routeName = '/itemchoosescreen';
+  final String name, age, gender, uuid;
 
   Position currentPosition;
-  int totalMoney;
 
   SharedPreferences prefs;
 
-  ItemsChooseScreen({this.name, this.age, this.gender, this.currentPosition, this.uuid, this.prefs});
+  ItemsChooseScreen(
+      {this.name,
+      this.age,
+      this.gender,
+      this.currentPosition,
+      this.uuid,
+      this.prefs});
 
   @override
   State<StatefulWidget> createState() => new _ItemsChooseScreenState();
 }
 
-
 class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
-
   String id;
+  int totalMoney = 100;
+
 
   @override
   void initState() {
     _getCurrentLocation();
-    this.widget.totalMoney = 100;
+  }
+
+  _onBackPressed() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (context) => RegisterScreen(
+                  currentPosition: this.widget.currentPosition,
+                  uuid: this.widget.uuid,
+                  prefs: this.widget.prefs,
+                )),
+        (Route<dynamic> route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: _buildPlayerItems(context),
+      backgroundColor: Colors.lightGreen[50],
     );
   }
 
-
   Widget _buildPlayerItems(BuildContext context) {
-
     List<AddSubButton> listButtons = new List<AddSubButton>();
-
 
     return ListView.builder(
       itemCount: itemData.length,
@@ -59,10 +70,18 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
         listButtons.add(btn);
         return Column(
           children: <Widget>[
-
             if (index == 0)
-              Text("Total Money: ${this.widget.totalMoney}"),
-              Padding(padding: EdgeInsets.only(bottom: 15.0, top: 5.0)),
+              AppBar(
+                title: Text("Total Money: $totalMoney"),
+                backgroundColor: Colors.green[700],
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    _onBackPressed();
+                  },
+                ),
+              ),
+            Padding(padding: EdgeInsets.only(bottom: 15.0, top: 5.0)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -72,9 +91,8 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
                   padding: EdgeInsets.only(left: 5.0),
                 ),
                 Container(
-
                   child: btn,
-                  alignment: Alignment.center,
+                  alignment: Alignment.topRight,
                 ),
               ],
             ),
@@ -88,27 +106,34 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
                   fontWeight: FontWeight.w700,
                   textColor: Colors.white,
                   onPressed: () async {
-
                     String finalItems = "";
-                    for(int i = 0; i < listButtons.length; i++){
-                      finalItems += "${itemData[i].name}:${itemData[i].holdItems};";
+                    for (int i = 0; i < listButtons.length; i++) {
+                      finalItems +=
+                          "${itemData[i].name}:${itemData[i].holdItems};";
                     }
 
-                    Survivor surv = await createSurvivorPost(this.widget.name, this.widget.age, this.widget.gender, this.widget.currentPosition.latitude.toString(), this.widget.currentPosition.longitude.toString(), finalItems);
+                    Survivor surv = await createSurvivorPost(
+                        this.widget.name,
+                        this.widget.age,
+                        this.widget.gender,
+                        this.widget.currentPosition.latitude.toString(),
+                        this.widget.currentPosition.longitude.toString(),
+                        finalItems);
                     _setPrefs(surv.id);
-
 
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
-                            builder: (context) =>
-                                UserMainScreen(currentPosition: this.widget.currentPosition, uuid: this.widget.uuid, prefs: this.widget.prefs, lastScreen: "register",)),
-                            (Route<dynamic> route) => false);
-
+                            builder: (context) => UserMainScreen(
+                                  currentPosition: this.widget.currentPosition,
+                                  uuid: this.widget.uuid,
+                                  lastScreen: "register",
+                                )),
+                        (Route<dynamic> route) => false);
                   },
                   splashColor: Colors.black12,
-                  borderColor: Colors.indigoAccent,
+                  borderColor: Colors.black,
                   borderWidth: 0,
-                  color: Colors.indigoAccent,
+                  color: Colors.lightGreen,
                 ),
               ),
           ],
@@ -116,8 +141,6 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
       },
     );
   }
-
-
 
   _getCurrentLocation() {
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
@@ -136,5 +159,23 @@ class _ItemsChooseScreenState extends State<ItemsChooseScreen> {
     this.widget.prefs = await SharedPreferences.getInstance();
     this.widget.prefs.setString("id", uuid);
   }
+
+  Future<void> _setPrefsMoney (int money) async {
+    this.widget.prefs = await SharedPreferences.getInstance();
+    this.widget.prefs.setInt("money", money);
+
+    setState(() {
+      totalMoney = money;
+
+    });
+  }
+
+  Future<int> _getPrefsMoney (int money) async {
+    this.widget.prefs = await SharedPreferences.getInstance();
+
+    return totalMoney = this.widget.prefs.getInt("money");
+
+  }
+
 
 }

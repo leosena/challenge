@@ -12,12 +12,7 @@ import 'file:///C:/Users/lscunha/AndroidStudioProjects/Project/challenge/lib/Ser
 
 
 class TradeItemsScreen extends StatefulWidget {
-  String uuid,
-         friendUuid;
-
-  SharedPreferences prefs;
-
-  TradeItemsScreen({this.uuid, this.friendUuid, this.prefs});
+  static const routeName = '/tradeitemscreen';
 
   @override
   State<StatefulWidget> createState() => new _TradeItemsScreenState();
@@ -25,6 +20,9 @@ class TradeItemsScreen extends StatefulWidget {
 
 
 class _TradeItemsScreenState extends State<TradeItemsScreen> {
+  SharedPreferences prefs;
+
+
   int totalMoneyP1,
       totalMoneyP2;
 

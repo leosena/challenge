@@ -35,15 +35,16 @@ class UserMainScreen extends StatefulWidget {
   Position currentPosition;
   String uuid, lastScreen;
 
-  SharedPreferences prefs;
 
   @override
   State<StatefulWidget> createState() => new _UserMainScreenState();
 
-  UserMainScreen({this.currentPosition, this.uuid, this.prefs, this.lastScreen});
+  UserMainScreen({this.currentPosition, this.uuid, this.lastScreen});
 }
 
 class _UserMainScreenState extends State<UserMainScreen> {
+  SharedPreferences prefs;
+
   GoogleMapController mapController;
 
 
@@ -62,7 +63,7 @@ class _UserMainScreenState extends State<UserMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar('The Resident Zombie'),
+      appBar: buildAppBar('The Resident Zombie', null),
       body: buildContainer(context),
       bottomNavigationBar: _bottomAppBarBuild(context),
     );
@@ -88,7 +89,7 @@ class _UserMainScreenState extends State<UserMainScreen> {
     return BottomAppBar(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           IconButton(
             icon: Icon(Icons.menu),
@@ -102,18 +103,15 @@ class _UserMainScreenState extends State<UserMainScreen> {
           IconButton(
             icon: Icon(Icons.contact_mail),
             onPressed: () {
-
+              Navigator.of(context).pushNamed('/friendlistscreen');
+              /*
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
                       builder: (context) =>
                           FriendListScreen(uuid: this.widget.uuid, prefs: this.widget.prefs)),
                       (Route<dynamic> route) => false);
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.bookmark_border),
-            onPressed: () {
 
+               */
             },
           ),
         ],
@@ -130,12 +128,16 @@ class _UserMainScreenState extends State<UserMainScreen> {
             title: const Text("Add a survivor!"),
             onTap: () {
 
+              Navigator.of(context).pushNamed('/addsurvivorscreen');
 
+              /*
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
                       builder: (context) =>
                           AddSurvivorScreen(prefs: this.widget.prefs)),
                       (Route<dynamic> route) => false);
+
+               */
 
 
             },

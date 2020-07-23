@@ -67,7 +67,7 @@ class _RootScreenState extends State<RootScreen>
         if(uniqueId == null)
           setState(() => _body = RegisterScreen(currentPosition: position, uuid: uniqueId, prefs: this.widget.prefs));
         else
-          setState(() => _body = UserMainScreen(currentPosition: position, uuid: uniqueId, prefs: this.widget.prefs, lastScreen: "root"));
+          setState(() => _body = UserMainScreen(currentPosition: position, uuid: uniqueId, lastScreen: "root"));
 
 
       });

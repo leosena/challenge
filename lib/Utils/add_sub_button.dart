@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trz/Classes/Items.dart';
 
 class AddSubButton extends StatefulWidget {
@@ -6,27 +7,25 @@ class AddSubButton extends StatefulWidget {
 
   _AddSubButtonState createState() => _AddSubButtonState();
   AddSubButton({this.index});
-
 }
 
 class _AddSubButtonState extends State<AddSubButton> {
   Color currentColor;
 
-  void _add(){
+  void _add() {
     setState(() {
       itemData[this.widget.index].holdItems += 1;
     });
   }
 
-  void _remove(){
+  void _remove() {
     setState(() {
-      if(itemData[this.widget.index].holdItems >= 1)
+      if (itemData[this.widget.index].holdItems >= 1)
         itemData[this.widget.index].holdItems -= 1;
     });
-
   }
 
-  int getValue(int idx){
+  int getValue(int idx) {
     return itemData[idx].holdItems;
   }
 
@@ -41,13 +40,14 @@ class _AddSubButtonState extends State<AddSubButton> {
     );
   }
 
-  Widget addWidget (BuildContext context) {
+  Widget addWidget(BuildContext context) {
     return MaterialButton(
       onPressed: () {
         _add();
-        print("${itemData[this.widget.index].holdItems}");
+        //_addPrefsMoney(itemData[this.widget.index].valueItem);
+        //print("${itemData[this.widget.index].holdItems}");
       },
-      color: Colors.blue,
+      color: Colors.green[700],
       textColor: Colors.white,
       child: Icon(
         Icons.add,
@@ -58,13 +58,14 @@ class _AddSubButtonState extends State<AddSubButton> {
     );
   }
 
-  Widget subWidget (BuildContext context) {
+  Widget subWidget(BuildContext context) {
     return MaterialButton(
       onPressed: () {
         _remove();
-        print("${itemData[this.widget.index].holdItems}");
+        //_subPrefsMoney(itemData[this.widget.index].valueItem);
+        //print("${itemData[this.widget.index].holdItems}");
       },
-      color: Colors.blue,
+      color: Colors.green[700],
       textColor: Colors.white,
       child: Icon(
         Icons.remove,
@@ -75,7 +76,7 @@ class _AddSubButtonState extends State<AddSubButton> {
     );
   }
 
-  Widget resultWidget (BuildContext context){
+  Widget resultWidget(BuildContext context) {
     return Container(
       height: 35,
       width: 90,
@@ -87,12 +88,26 @@ class _AddSubButtonState extends State<AddSubButton> {
             color: Colors.black,
             width: 1.5,
           ),
-          borderRadius: BorderRadius.all(
-              Radius.circular(10)
-          )
-      ),
+          borderRadius: BorderRadius.all(Radius.circular(10))),
       child: new Text("${itemData[this.widget.index].holdItems}"),
     );
+  }
 
+  Future<void> _addPrefsMoney(int money) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    int moneyTotal = prefs.getInt("money");
+    moneyTotal += money;
+    prefs.setInt("money", moneyTotal);
+  }
+
+  Future<void> _subPrefsMoney(int money) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    int moneyTotal = prefs.getInt("money");
+    moneyTotal -= money;
+    prefs.setInt("money", moneyTotal);
   }
 }
+
+

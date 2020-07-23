@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trz/Classes/Surivor.dart';
 import 'package:http/http.dart' as http;
 
@@ -66,3 +67,34 @@ Future<Survivor> updateSurvivorPost (String name, String age, String gender, Str
   }
 
 }
+
+Future<int> reportInfectedPost () async {
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String fuuid = await prefs.getString("fid");
+  String uuid = await prefs.getString("id");
+
+  final String apiUrl = "http://zssn-backend-example.herokuapp.com/api/people/$uuid/report_infection.json";
+
+  var bodyData = json.encode(<String, dynamic>{
+    "infected": fuuid,
+    "id": uuid,
+  });
+
+  final response = await http.post(
+    apiUrl,
+    headers: {"Content-Type": "application/json"},
+    body: bodyData,
+  );
+
+  print (response.statusCode);
+
+  if(response.statusCode == 204){
+    return response.statusCode;
+  }else{
+    return null;
+  }
+}
+
+
+//http://zssn-backend-example.herokuapp.com/api/people/59295abd-455f-4156-abc7-121f3ea3191e/report_infection.json

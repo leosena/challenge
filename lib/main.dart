@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'AppScreens/AddSurvivorScreen.dart';
+import 'AppScreens/FriendListScreen.dart';
+import 'AppScreens/TradeItemsScreen.dart';
 import 'AppScreens/WelcomeScreen.dart';
 
 void main() async {
@@ -27,6 +30,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
       ),
       home: _handleCurrentScreen(),
+      routes: <String, WidgetBuilder>{
+        AddSurvivorScreen.routeName: (BuildContext context) => new AddSurvivorScreen(),
+        FriendListScreen.routeName: (BuildContext context) => new FriendListScreen(),
+        TradeItemsScreen.routeName: (BuildContext context) => new TradeItemsScreen(),
+
+      },
     );
   }
 
