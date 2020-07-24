@@ -13,11 +13,20 @@ Leonardo de Sena Cunha
 ## Dependencies
 
 User need to activate GPS and allow APP to access GPS data.
+Local storage (SharedPreferences) used for store usefull information like gps data and uuid, for usage on some procedures.
+
+
 
 ## APP Flow
+
+
 Splash Screen: Introduction of APP
 
 ![](https://github.com/leosena/challenge/blob/master/Screens/splash.PNG)
+
+Root Screen: 
+
+- Check local storage if user is registered or not, then routes to specific screen.
 
 
 Register Screen: Here user register with his name, age and gender.
