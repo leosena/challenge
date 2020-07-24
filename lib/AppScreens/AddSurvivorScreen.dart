@@ -89,7 +89,7 @@ class _AddSurvivorScreenState extends State<AddSurvivorScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(
                   vertical: 15.0, horizontal: 15.0),
-              child: RaisedButton(
+              child: FlatButton(
                 color: Colors.green[700],
                 onPressed: () {
                   _setPrefs(_addFieldController.text);
@@ -100,7 +100,11 @@ class _AddSurvivorScreenState extends State<AddSurvivorScreen> {
 
                   Scaffold.of(context).showSnackBar(snackBar);
                 },
-                child: Text('Invite'),
+                child: Text('Invite',
+                  style: TextStyle(
+                  color: Colors.white,
+                  ),
+                ),
               ),
             ),
           ],
