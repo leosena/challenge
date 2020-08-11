@@ -4,7 +4,10 @@ Leonardo de Sena Cunha
 Not the best Flutter code you will find, but you can see many cool features here in use.
 Enjoy
 
-Make sure you put your API key of google maps if you use.
+Make sure you put your API key of google maps if you use. Search for "PUT YOUR API HERE" 
+- challenge/android/app/src/main/AndroidManifest.xml
+- challenge/ios/Runner/AppDelegate.swift
+
 
 ## Getting Started
 
